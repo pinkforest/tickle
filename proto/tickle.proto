@@ -1,0 +1,70 @@
+syntax = "proto3";
+package tickle;
+
+service TickleCore {
+
+  rpc Hello(Avail) returns (stream Tickle) {}
+
+  // rpc Laugh(stream Laughter) returns (stream Ack) {}
+
+  // rpc Groan(stream Gibberish) returns (stream Ack) {}
+
+  // rpc Utter(Safeword) returns (Safeword) {}
+
+  // rpc Observe(Tickle) returns (Tickle) {}
+
+} 
+
+message Avail {
+  uint64 capacity = 1;
+}
+
+message Tickle {
+  string tickle = 1;
+  string instance = 2;
+
+  enum Intent {
+    TAKE = 0;
+    FORGET = 1;
+    OBSERVE = 2;
+  }
+  optional Intent intent = 3;
+}
+
+message Safeword {
+  string tickle = 1;
+  string instance = 2;
+
+  enum WordType {
+    PING = 0;
+    PONG = 1;
+    STARTED = 2;
+    STOPPED = 3;
+    TERMINATED = 4;
+  }
+  WordType type = 3;
+
+  enum StatusType {
+    FAILED = 0;
+    SUCCEEDED = 1;
+  }
+  StatusType exit_code = 4;
+}
+
+message Laughter {
+  string instance = 1;
+  uint64 seq = 2;
+  repeated string dialogue = 3;
+}
+
+message Gibberish {
+  string instance = 1;
+  string related = 2;
+  uint64 seq = 3;
+  repeated bytes nonsense = 4;
+}
+
+message Ack {
+  string instance = 1;
+  repeated uint64 seq = 2;
+}
